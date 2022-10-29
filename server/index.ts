@@ -1,6 +1,10 @@
 import express from "express"
+import dotenv from "dotenv"
+import mongoose from "mongoose"
 
 import workoutRoutes from "./routes"
+
+dotenv.config()
 
 const app = express()
 const port = 3000
@@ -14,4 +18,11 @@ app.use((req, res, next) => {
 
 app.use("/api/workouts", workoutRoutes)
 
-app.listen(port, () => console.log(`App listening on port ${port}!`))
+mongoose
+  .connect(process.env.MONGO_URI as string)
+  .then(() => {
+    app.listen(port, () => console.log(`Connect to DB & listening on port ${port}!`))
+  })
+  .catch((error) => {
+    console.log(error)
+  })
