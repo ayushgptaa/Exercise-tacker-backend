@@ -12,7 +12,5 @@ module.exports = {
     sourceType: "module"
   },
   plugins: ["@typescript-eslint"],
-  rules: {
-    "no-console": "warn"
-  }
+  rules: {}
 }
