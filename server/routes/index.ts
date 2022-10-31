@@ -1,30 +1,22 @@
 import { Router } from "express"
 
+import { createNewWorkout, getAllWorkouts, getSingleWorkout, deleteWorkout, updateWorkout } from "../controllers"
+
 const router = Router()
 
 //GET all workouts
-router.get("/", (req, res) => {
-  res.json({ msg: "GET all workouts" })
-})
+router.get("/", getAllWorkouts)
 
 //GET single workout
-router.get("/:id", (req, res) => {
-  res.json({ msg: "GET single workout" })
-})
+router.get("/:id", getSingleWorkout)
 
 //POST new workout
-router.post("/", (req, res) => {
-  res.json({ msg: "POST new workout" })
-})
+router.post("/", createNewWorkout)
 
 //DELETE new workout
-router.delete("/:id", (req, res) => {
-  res.json({ msg: "DELETE a workout" })
-})
+router.delete("/:id", deleteWorkout)
 
 //UPDATE new workout
-router.patch("/:id", (req, res) => {
-  res.json({ msg: "UPDATE a workout" })
-})
+router.patch("/:id", updateWorkout)
 
 export default router
