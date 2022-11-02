@@ -2,12 +2,24 @@ import { Schema, model } from "mongoose"
 
 const workoutSchema = new Schema(
   {
-    title: String,
+    dayName: {
+      type: String,
+      required: true
+    },
     exercises: [
       {
-        name: String,
-        reps: Number,
-        weight: Number
+        name: {
+          type: String,
+          required: true
+        },
+        reps: {
+          type: Number,
+          required: true
+        },
+        weight: {
+          type: Number,
+          required: true
+        }
       }
     ]
   },
