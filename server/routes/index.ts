@@ -6,8 +6,8 @@ import {
   getAllWorkouts,
   getSingleWorkout,
   deleteWorkout,
-  updateWorkout,
   addExercise,
+  addsets,
   removeExercise
 } from "../controllers"
 
@@ -22,17 +22,17 @@ router.get("/:id", getSingleWorkout)
 //POST new workout
 router.post("/", createNewWorkout)
 
-//DELETE new workout
+//DELETE a workout
 router.delete("/:id", deleteWorkout)
 
-//UPDATE new workout
-router.patch("/:id", updateWorkout)
-
 //Add exercise to workout
-router.patch("/:id/exercises", addExercise)
+router.post("/add-exercise/:id", addExercise)
 
-//Add exercise to workout
-router.delete("/:id/exercises", removeExercise)
+//Remove exercise from workout
+router.delete("/remove-exercise/:id", removeExercise)
+
+//Add sets to a exercise
+router.post("/add-sets/:exerciseid", addsets)
 
 //Temp route to delete all workouts
 router.delete("/", async (req, res) => {

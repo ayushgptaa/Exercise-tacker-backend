@@ -56,15 +56,15 @@ const deleteWorkout = async (req: Request, res: Response) => {
   return res.status(200).json({ msg: "Workout deleted" })
 }
 
-//Update a workout
-const updateWorkout = async (req: Request, res: Response) => {
+//Add an exercise
+const addExercise = async (req: Request, res: Response) => {
   const { id } = req.params
 
   if (!isValidId(id)) {
     return res.status(400).json({ error: "Invalid workout ID" })
   }
 
-  const workout = await WorkoutModel.findByIdAndUpdate(id, { ...req.body })
+  const workout = await WorkoutModel.findByIdAndUpdate(id, { $addToSet: { exercises: req.body } })
 
   if (!workout) {
     return res.status(404).json({ error: "Workout not found" })
@@ -73,18 +73,17 @@ const updateWorkout = async (req: Request, res: Response) => {
   return res.status(200).json({ msg: "Workout updated" })
 }
 
-//Add exercise to workout
-const addExercise = async (req: Request, res: Response) => {
-  const { id } = req.params
+//Add sets to a exercise
+const addsets = async (req: Request, res: Response) => {
+  const { exerciseid } = req.params
 
-  if (!isValidId(id)) {
+  if (!isValidId(exerciseid)) {
     return res.status(400).json({ error: "Invalid workout ID" })
   }
 
-  const workout = await WorkoutModel.findByIdAndUpdate(
-    id,
-    { $addToSet: { exercises: { ...req.body } } },
-    { new: true, upsert: true, safe: true }
+  const workout = await WorkoutModel.findOneAndUpdate(
+    { "exercises._id": exerciseid },
+    { $push: { "exercises.$.sets": req.body } }
   )
 
   if (!workout) {
@@ -98,11 +97,13 @@ const addExercise = async (req: Request, res: Response) => {
 const removeExercise = async (req: Request, res: Response) => {
   const { id } = req.params
 
+  console.log(req.body)
+
   if (!isValidId(id)) {
     return res.status(400).json({ error: "Invalid workout ID" })
   }
 
-  const workout = await WorkoutModel.findByIdAndUpdate(id, { $pull: { exercises: { ...req.body } } })
+  const workout = await WorkoutModel.findOneAndUpdate({ "exercises._id": id }, { $pull: { exercises: { _id: id } } })
 
   if (!workout) {
     return res.status(404).json({ error: "Workout not found" })
@@ -111,4 +112,4 @@ const removeExercise = async (req: Request, res: Response) => {
   return res.status(200).json({ msg: "Workout updated" })
 }
 
-export { createNewWorkout, getAllWorkouts, getSingleWorkout, deleteWorkout, updateWorkout, addExercise, removeExercise }
+export { createNewWorkout, getAllWorkouts, getSingleWorkout, deleteWorkout, addExercise, addsets, removeExercise }
