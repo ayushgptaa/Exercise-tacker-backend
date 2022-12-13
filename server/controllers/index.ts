@@ -83,7 +83,7 @@ const addsets = async (req: Request, res: Response) => {
 
   const workout = await WorkoutModel.findOneAndUpdate(
     { "exercises._id": exerciseid },
-    { $push: { "exercises.$.sets": req.body } }
+    { $push: { "exercises.$.sets": [...req.body] } }
   )
 
   if (!workout) {
@@ -126,6 +126,26 @@ const updateSets = async (req: Request, res: Response) => {
   return res.status(200).json({ msg: "Workout updated" })
 }
 
+//Remove set from a exercise
+const removeSets = async (req: Request, res: Response) => {
+  const { setId } = req.params
+
+  if (!isValidId(setId)) {
+    return res.status(400).json({ error: "Invalid workout ID" })
+  }
+
+  const workout = await WorkoutModel.findOneAndUpdate(
+    { "exercises.sets._id": setId },
+    { $pull: { "exercises.$.sets": { _id: setId } } }
+  )
+
+  if (!workout) {
+    return res.status(404).json({ error: "Workout not found" })
+  }
+
+  return res.status(200).json({ msg: "Workout updated" })
+}
+
 //Remove exercise from a workout
 const removeExercise = async (req: Request, res: Response) => {
   const { id } = req.params
@@ -153,5 +173,6 @@ export {
   addExercise,
   addsets,
   updateSets,
+  removeSets,
   removeExercise
 }

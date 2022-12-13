@@ -9,6 +9,7 @@ import {
   addExercise,
   addsets,
   updateSets,
+  removeSets,
   removeExercise
 } from "../controllers"
 
@@ -32,11 +33,14 @@ router.post("/add-exercise/:id", addExercise)
 //Remove exercise from workout
 router.delete("/remove-exercise/:id", removeExercise)
 
-//Add sets to a exercise
+//Add sets to an exercise
 router.post("/add-sets/:exerciseid", addsets)
 
-//Add sets to a exercise
-router.patch("/update-sets/:setId", updateSets)
+//Update sets for an exercise
+router.patch("/update-set/:setId", updateSets)
+
+//Remove set for an exercise
+router.delete("/remove-set/:setId", removeSets)
 
 //Temp route to delete all workouts
 router.delete("/", async (req, res) => {
